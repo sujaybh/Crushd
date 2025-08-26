@@ -1,0 +1,55 @@
+<context>
+
+app/
+├── index.tsx                 # App entry point
+├── _layout.tsx              # Root navigation layout
+├── AuthScreen.tsx           # Authentication (login)
+├── SignupScreen.tsx         # User registration
+├── HomeScreen.tsx           # Main dashboard with stats
+├── ProfileScreen.tsx        # User profile display
+├── EditProfileScreen.tsx    # Profile editing interface
+├── SwipeScreen.tsx          # Swiping/matching interface
+├── ChatScreen.tsx           # Messaging system
+└── about.tsx               # App information
+
+contexts/
+├── ProfileContexts.tsx      # User profile state management
+├── TeamContext.tsx         # Team state management (In Progress)
+├── GameContext.tsx         # Competition state management (In Progress)
+└── AuthContext.tsx         # Authentication state (In Progress)
+
+constants/
+├── ProfileData.ts          # Test user profile data
+├── app_config.ts          # API endpoints configuration
+├── GameConfig.ts          # Game rules and settings (In Progress)
+└── TeamData.ts            # Test team data (In Progress)
+
+services/
+├── ApiService.ts          # REST API communication layer
+├── TeamService.ts         # Team management APIs (In Progress)
+├── GameService.ts         # Competition APIs (In Progress)
+├── MatchService.ts        # Matching algorithm APIs (In Progress)
+└── WebSocketService.ts    # Real-time updates (In Progress)
+
+components/
+├── ui/                    # Reusable UI components (In Progress)
+├── game/                  # Game-specific components (In Progress)
+├── team/                  # Team management components (In Progress)
+└── profile/               # Profile-related components (In Progress)
+
+
+
+I am making an app called Crushd that is a dating app that's going to have jackbox--like games for young people to play, either individually or as teams.
+
+I am currenlty working on the frontend, and above is the directory structure of these things.
+
+I am using react-native along with expo to code this app. I already have a working frontend where I can properly route between the different screens, but no backend.
+
+<\context>
+<prompt>
+
+what backend should I use? how would i go about adding this to my app in visual studio code in my current folder?
+
+what should i use as an api? what would the structure of the backend look like?
+
+what are some key things that would be required at the moment for a backend? The first thing I want to implement is authentication.

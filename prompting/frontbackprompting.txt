@@ -1,0 +1,95 @@
+backend/
+├── src/
+│   ├── controllers/          # Route handlers
+│   │   ├── authController.ts
+│   │   ├── profileController.ts
+│   │   ├── matchController.ts
+│   │   ├── gameController.ts
+│   │   └── chatController.ts
+│   ├── middleware/           # Auth, validation, error handling
+│   │   ├── auth.ts
+│   │   ├── validation.ts
+│   │   └── errorHandler.ts
+│   ├── models/              # Database models
+│   │   ├── User.ts
+│   │   ├── Profile.ts
+│   │   ├── Match.ts
+│   │   ├── Game.ts
+│   │   └── Message.ts
+│   ├── routes/              # API routes
+│   │   ├── auth.ts
+│   │   ├── profiles.ts
+│   │   ├── matches.ts
+│   │   ├── games.ts
+│   │   └── chat.ts
+│   ├── services/            # Business logic
+│   │   ├── authService.ts
+│   │   ├── matchingService.ts
+│   │   ├── gameService.ts
+│   │   └── notificationService.ts
+│   ├── socket/              # Socket.IO handlers
+│   │   ├── gameHandlers.ts
+│   │   ├── chatHandlers.ts
+│   │   └── matchHandlers.ts
+│   ├── config/              # Configuration
+│   │   ├── database.ts
+│   │   ├── redis.ts
+│   │   └── env.ts
+│   ├── utils/               # Helper functions
+│   └── app.ts               # Express app setup
+├── package.json
+├── tsconfig.json
+└── .env
+
+
+Frontend:
+
+app/
+├── index.tsx                 # App entry point
+├── _layout.tsx              # Root navigation layout
+├── AuthScreen.tsx           # Authentication (login)
+├── SignupScreen.tsx         # User registration
+├── HomeScreen.tsx           # Main dashboard with stats
+├── ProfileScreen.tsx        # User profile display
+├── EditProfileScreen.tsx    # Profile editing interface
+├── SwipeScreen.tsx          # Swiping/matching interface
+├── ChatScreen.tsx           # Messaging system
+└── about.tsx               # App information
+
+contexts/
+├── ProfileContexts.tsx      # User profile state management
+├── TeamContext.tsx         # Team state management (In Progress)
+├── GameContext.tsx         # Competition state management (In Progress)
+└── AuthContext.tsx         # Authentication state (In Progress)
+
+constants/
+├── ProfileData.ts          # Test user profile data
+├── app_config.ts          # API endpoints configuration
+├── GameConfig.ts          # Game rules and settings (In Progress)
+└── TeamData.ts            # Test team data (In Progress)
+
+services/
+├── ApiService.ts          # REST API communication layer
+├── TeamService.ts         # Team management APIs (In Progress)
+├── GameService.ts         # Competition APIs (In Progress)
+├── MatchService.ts        # Matching algorithm APIs (In Progress)
+└── WebSocketService.ts    # Real-time updates (In Progress)
+
+components/
+├── ui/                    # Reusable UI components (In Progress)
+├── game/                  # Game-specific components (In Progress)
+├── team/                  # Team management components (In Progress)
+└── profile/               # Profile-related components (In Progress)
+
+
+
+I am making an app called Crushd that is a dating app that's going to have jackbox--like games for young people to play, either individually or as teams.
+
+I am currenlty working on the frontend, and above is the directory structure of these things.
+
+I am using react-native along with expo to code this app. I already have a working frontend where I can properly route between the different screens. I am currently developing my backend.
+
+
+<\context>
+<prompt>
+
