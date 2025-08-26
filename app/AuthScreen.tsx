@@ -68,7 +68,7 @@ export default function AuthScreen() {
       <View style={styles.bottomButton}>
         <Text style={styles.signupText}>Don't have an account?</Text>
         <Button
-          title="Sign Up"
+          title="Sign Up button"
           onPress={() => router.push('/SignupScreen')}
         />
       </View>
