@@ -8,10 +8,16 @@ import { Profile, testProfiles } from '../constants/testProfiles';
 export default function SwipeScreen() {
   const { width, height } = useWindowDimensions();
   const [profiles, setProfiles] = useState<Profile[]>(testProfiles);
+  const [allSwiped, setAllSwiped] = useState(false);
   const swiperRef = useRef(null);
 
   const onSwiped = (type: string) => {
     console.log(`Swiped ${type}`);
+  };
+
+  const onSwipedAll = () => {
+    console.log('No more cards!');
+    setAllSwiped(true);
   };
 
   const fetchProfiles = async () => {
@@ -45,7 +51,7 @@ export default function SwipeScreen() {
           )}
           onSwipedLeft={() => onSwiped('left')}
           onSwipedRight={() => onSwiped('right')}
-          onSwipedAll={() => console.log('No more cards!')}
+          onSwipedAll={onSwipedAll}
           cardIndex={0}
           backgroundColor={'transparent'}
           stackSize={3}
@@ -64,19 +70,25 @@ export default function SwipeScreen() {
         />
       </View>
 
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity 
-          style={[styles.button, styles.nopeButton]}
-          onPress={() => swiperRef.current.swipeLeft()}>
-          <Ionicons name="close" size={40} color="#F06795" />
-        </TouchableOpacity>
+      {allSwiped ? (
+        <View style={styles.messageContainer}>
+          <Text style={styles.messageText}>No more profiles available!</Text>
+        </View>
+      ) : (
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity 
+            style={[styles.button, styles.nopeButton]}
+            onPress={() => swiperRef.current.swipeLeft()}>
+            <Ionicons name="close" size={40} color="#F06795" />
+          </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={[styles.button, styles.likeButton]}
-          onPress={() => swiperRef.current.swipeRight()}>
-          <Ionicons name="checkmark" size={40} color="#64EDCC" />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity 
+            style={[styles.button, styles.likeButton]}
+            onPress={() => swiperRef.current.swipeRight()}>
+            <Ionicons name="checkmark" size={40} color="#64EDCC" />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
@@ -155,5 +167,14 @@ const styles = StyleSheet.create({
     fontSize: 45,
     fontWeight: 'bold',
     padding: 10,
+  },
+  messageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  messageText: {
+    fontSize: 18,
+    color: '#666',
   },
 });
