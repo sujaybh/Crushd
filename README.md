@@ -23,7 +23,7 @@ Crushd transforms dating from a solo activity into an engaging team sport. Users
 
 ### Frontend (React Native + Expo)
 ```
-app/
+frontend/app/
 ├── index.tsx                 # App entry point
 ├── _layout.tsx              # Root navigation layout
 ├── AuthScreen.tsx           # Authentication (login)
@@ -61,6 +61,27 @@ components/
 └── profile/               # Profile-related components (In Progress)
 ```
 
+### Backend (Node.js + TypeScript + Express)
+```
+backend/
+├── src/
+│   ├── index.ts             # Express server entry point
+│   ├── routes/              # API route handlers
+│   │   ├── auth.ts          # Authentication endpoints
+│   │   ├── users.ts         # User management
+│   │   ├── teams.ts         # Team management
+│   │   ├── matches.ts       # Matching system
+│   │   └── competitions.ts  # Competition system
+│   ├── controllers/         # Business logic layer
+│   ├── models/              # Database models & types
+│   ├── middleware/          # Express middleware
+│   ├── services/            # External service integrations
+│   ├── utils/               # Helper functions
+│   └── config/              # Configuration files
+├── docker-compose.yml       # PostgreSQL database setup
+└── package.json            # Node.js dependencies
+```
+
 ---
 
 ## 🔧 Tech Stack
@@ -73,14 +94,17 @@ components/
 - **Real-time**: WebSocket connections (In Progress)
 - **Push Notifications**: Expo Notifications (In Progress)
 
-### Backend (In Progress)
-- **API Framework**: FastAPI (Python)
-- **Database**: PostgreSQL with SQLAlchemy ORM
-- **Authentication**: JWT tokens with refresh mechanism
-- **Real-time**: WebSocket support for live competitions
-- **File Storage**: AWS S3 for profile photos
-- **Caching**: Redis for session management and leaderboards
-- **Queue System**: Celery for background tasks
+### Backend
+- **Runtime**: Node.js with TypeScript
+- **Framework**: Express.js
+- **Database**: PostgreSQL with Docker
+- **ORM**: pg (node-postgres) for database queries
+- **Authentication**: JWT tokens with bcryptjs
+- **Real-time**: Socket.IO for live competitions
+- **Caching**: Redis and ioredis for session management
+- **Security**: Helmet.js, CORS middleware
+- **Logging**: Morgan for request logging
+- **Development**: Nodemon with ts-node for hot reload
 
 ### Database Schema (In Progress)
 ```sql
@@ -162,14 +186,33 @@ GET    /leaderboards/team/:id
 ### Prerequisites
 - Node.js (v16+)
 - npm or yarn
-- Expo CLI
+- Docker and Docker Compose
+- Expo CLI (for frontend)
 - iOS Simulator (Mac) or Android Emulator
 
-### Installation
-1. **Clone the repository**
+### Database Setup
+1. **Start PostgreSQL database**
    ```bash
-   git clone [repository-url]
-   cd crushd
+   cd backend
+   npm run db:start
+   ```
+
+2. **Database will be available at:**
+   ```
+   postgresql://crushed:dev_password@localhost:5432/crushed_dev
+   ```
+
+3. **Useful database commands:**
+   ```bash
+   npm run db:stop    # Stop database
+   npm run db:logs    # View database logs
+   npm run db:reset   # Reset database (removes all data)
+   ```
+
+### Backend Setup
+1. **Navigate to backend directory**
+   ```bash
+   cd backend
    ```
 
 2. **Install dependencies**
@@ -177,7 +220,28 @@ GET    /leaderboards/team/:id
    npm install
    ```
 
-3. **Start the development server**
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Backend will be running at:**
+   ```
+   http://localhost:3000
+   ```
+
+### Frontend Setup
+1. **Navigate to frontend directory**
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start Expo development server**
    ```bash
    npx expo start
    ```
@@ -187,14 +251,28 @@ GET    /leaderboards/team/:id
    - Press `a` for Android emulator
    - Scan QR code with Expo Go app for physical device
 
-### Environment Setup
+### Full Development Setup
 ```bash
-# Copy environment template (In Progress)
+# Terminal 1 - Database
+cd backend && npm run db:start
+
+# Terminal 2 - Backend API
+cd backend && npm run dev
+
+# Terminal 3 - Frontend
+cd frontend && npx expo start
+```
+
+### Environment Setup (In Progress)
+```bash
+# Backend environment
+cd backend
 cp .env.example .env
 
-# Configure API endpoints
-EXPO_PUBLIC_API_URL=http://localhost:3000/api
-EXPO_PUBLIC_WS_URL=ws://localhost:3000/ws
+# Configure database and API settings
+DATABASE_URL=postgresql://crushed:dev_password@localhost:5432/crushed_dev
+JWT_SECRET=your_jwt_secret_here
+REDIS_URL=redis://localhost:6379
 ```
 
 ---
@@ -221,28 +299,36 @@ Team Score = Sum of all member scores + Team synergy multiplier
 
 ---
 
-## 🗄️ Backend Architecture (In Progress)
+## 🗄️ Backend Architecture
 
-### FastAPI Application Structure
-```python
-app/
-├── main.py                 # FastAPI application entry
-├── config/                 # Configuration and settings
-├── models/                 # SQLAlchemy database models
-├── schemas/                # Pydantic schemas for API
-├── routers/                # API route handlers
-├── services/               # Business logic layer
-├── utils/                  # Helper functions
-├── database/               # Database connection and migrations
-└── tests/                  # Test suites
+### Express Application Structure
+```typescript
+// src/index.ts - Server setup
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+
+// Middleware stack
+app.use(helmet());           # Security headers
+app.use(cors());            # Cross-origin requests
+app.use(morgan('combined')); # Request logging
+app.use(express.json());    # JSON parsing
+
+// Route mounting
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/teams', teamRoutes);
 ```
 
 ### Key Features
-- **Async/Await**: Full async support for high performance
-- **Database Migrations**: Alembic for schema management
-- **API Documentation**: Auto-generated with FastAPI
-- **Input Validation**: Pydantic models for type safety
-- **Authentication**: JWT with role-based permissions
+- **TypeScript**: Full type safety across the application
+- **Docker Database**: Consistent PostgreSQL setup for all developers
+- **JWT Authentication**: Secure token-based auth with bcryptjs
+- **Real-time Communication**: Socket.IO for live features
+- **Redis Caching**: Fast session storage and leaderboards
+- **Security**: Helmet.js and CORS protection
+- **Development Experience**: Hot reload with nodemon + ts-node
 
 ---
 
@@ -255,13 +341,16 @@ app/
 - Home dashboard with stats
 - Authentication screens (UI only)
 - API service layer boilerplate
+- Backend project structure with TypeScript
+- Dockerized PostgreSQL database setup
+- Database management scripts
 
 ### 🚧 In Progress
-- Backend API development (FastAPI + PostgreSQL)
+- Backend API development (Express + PostgreSQL)
 - Team management system
 - Competition mechanics
 - Real-time matching system
-- WebSocket integration
+- Socket.IO integration
 - Push notifications
 
 ### 📋 Planned Features
@@ -284,6 +373,25 @@ This project is currently in active development. Contribution guidelines will be
 3. Automated testing
 4. Staging deployment
 5. Production release
+
+---
+
+## 🛠️ Troubleshooting
+
+### Database Issues
+- **Port 5432 in use**: Stop local PostgreSQL with `sudo systemctl stop postgresql`
+- **Docker not found**: Install Docker and Docker Compose
+- **Permission denied**: Add user to docker group: `sudo usermod -aG docker $USER`
+
+### Backend Issues
+- **Module not found**: Run `npm install` in backend directory
+- **TypeScript errors**: Check `tsconfig.json` configuration
+- **Port conflicts**: Change port in Express server configuration
+
+### Frontend Issues
+- **Expo CLI not found**: Install globally with `npm install -g @expo/cli`
+- **Metro bundler issues**: Clear cache with `npx expo start -c`
+- **Device connection**: Ensure devices are on same network
 
 ---
 

@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:start": "docker compose up -d postgres && echo 'Database ready at postgresql://crushed:dev_password@localhost:5432/crushed_dev'",
+    "db:stop": "docker compose down",
+    "db:logs": "docker compose logs postgres",
+    "db:reset": "docker compose down -v && docker compose up -d postgres"
   },
   "keywords": [],
   "author": "",
