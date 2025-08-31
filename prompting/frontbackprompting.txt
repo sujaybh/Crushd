@@ -3,7 +3,7 @@ backend/
 │   ├── controllers/          # Route handlers
 │   │   ├── authController.ts
 │   │   ├── profileController.ts
-│   │   ├── matchController.ts
+│   │   ├── swipeController.ts
 │   │   ├── gameController.ts
 │   │   └── chatController.ts
 │   ├── middleware/           # Auth, validation, error handling
