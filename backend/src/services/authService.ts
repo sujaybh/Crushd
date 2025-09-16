@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Pool } from 'pg';
-import { CreateUserData, UserModel, UserResponse } from '../models/User';
+import { CreateUserData, UserModel, UserResponse } from '../models/User.js';
 
 export interface LoginCredentials {
   email: string;
@@ -163,19 +163,25 @@ export class AuthService {
   }
 
   private generateTokens(user: UserResponse): AuthTokens {
-    const payload: Omit<JWTPayload, 'iat' | 'exp'> = {
+    // Create payload as a plain object with explicit typing
+    const payload: Record<string, any> = {
       userId: user.id,
       email: user.email,
       username: user.username
     };
 
-    const accessToken = jwt.sign(payload, this.jwtSecret, {
-      expiresIn: this.accessTokenExpiry
-    });
+    // Generate tokens with explicit options typing
+    const accessToken = jwt.sign(
+      payload,
+      this.jwtSecret,
+      { expiresIn: this.accessTokenExpiry } as jwt.SignOptions
+    );
 
-    const refreshToken = jwt.sign(payload, this.refreshSecret, {
-      expiresIn: this.refreshTokenExpiry
-    });
+    const refreshToken = jwt.sign(
+      payload,
+      this.refreshSecret,
+      { expiresIn: this.refreshTokenExpiry } as jwt.SignOptions
+    );
 
     return {
       accessToken,

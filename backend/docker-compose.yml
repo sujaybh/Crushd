@@ -1,15 +1,46 @@
 version: '3.8'
+
 services:
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
+    container_name: crushd_postgres
     environment:
       POSTGRES_DB: crushed_dev
       POSTGRES_USER: crushed
       POSTGRES_PASSWORD: dev_password
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - crushd_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crushed -d crushed_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  #redis:
+  #  image: redis:7-alpine
+  #  container_name: crushd_redis
+  #  ports:
+  #    - "6379:6379"
+    # volumes:
+    #   - redis_data:/data
+    # networks:
+    #   - crushd_network
+    # healthcheck:
+    #   test: ["CMD", "redis-cli", "ping"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 5
 
 volumes:
   postgres_data:
+  redis_data:
+
+networks:
+  crushd_network:
+    driver: bridge

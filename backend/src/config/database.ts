@@ -1,5 +1,5 @@
 import { Pool, PoolClient, PoolConfig } from 'pg';
-import { createUsersTableSQL } from '../models/User';
+import { createUsersTableSQL } from '../models/User.js';
 
 interface DatabaseConfig {
   host: string;
@@ -24,6 +24,14 @@ class Database {
   }
 
   private getConfig(): PoolConfig {
+    console.log('DB Config:', {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      // Don't log password in production!
+    });
+
     const isProduction = process.env.NODE_ENV === 'production';
     
     // If DATABASE_URL is provided (common in production/Heroku), use it

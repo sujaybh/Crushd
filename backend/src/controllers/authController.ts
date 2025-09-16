@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Pool } from 'pg';
-import { AuthService, LoginCredentials, RegisterData } from '../services/authService';
+import { AuthService, LoginCredentials, RegisterData } from '../services/authService.js';
 
 export class AuthController {
   private authService: AuthService;

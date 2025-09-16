@@ -1,72 +1,150 @@
 import { Router } from 'express';
 import { Pool } from 'pg';
-import { AuthController } from '../controllers/authController';
-import { authMiddleware } from '../middleware/auth';
-import { validateLogin, validatePasswordReset, validateRegistration } from '../middleware/validation';
+import { AuthController } from '../controllers/authController.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { validateLogin, validatePasswordReset, validateRegistration } from '../middleware/validation.js';
 
 export function createAuthRoutes(pool: Pool): Router {
   const router = Router();
   const authController = new AuthController(pool);
 
   /**
-   * @route   POST /api/auth/register
-   * @desc    Register a new user
-   * @access  Public
-   * @body    { email, username, password, first_name?, last_name?, date_of_birth? }
+   * @openapi
+   * /api/auth/register:
+   *   post:
+   *     summary: Register a new user
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [email, username, password]
+   *             properties:
+   *               email:
+   *                 type: string
+   *               username:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: User registered successfully
    */
   router.post('/register', validateRegistration, authController.register);
 
   /**
-   * @route   POST /api/auth/login
-   * @desc    Authenticate user and get tokens
-   * @access  Public
-   * @body    { email, password }
+   * @openapi
+   * /api/auth/login:
+   *   post:
+   *     summary: Login user
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [email, password]
+   *             properties:
+   *               email:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Login successful
    */
   router.post('/login', validateLogin, authController.login);
 
   /**
-   * @route   POST /api/auth/refresh
-   * @desc    Refresh access token using refresh token
-   * @access  Public (requires refresh token in cookies)
+   * @openapi
+   * /api/auth/refresh:
+   *   post:
+   *     summary: Refresh access token
+   *     responses:
+   *       200:
+   *         description: Token refreshed successfully
    */
   router.post('/refresh', authController.refreshToken);
 
   /**
-   * @route   POST /api/auth/logout
-   * @desc    Logout user and clear refresh token
-   * @access  Public
+   * @openapi
+   * /api/auth/logout:
+   *   post:
+   *     summary: Logout user
+   *     responses:
+   *       200:
+   *         description: Logout successful
    */
   router.post('/logout', authController.logout);
 
   /**
-   * @route   GET /api/auth/me
-   * @desc    Get current user information
-   * @access  Private
-   * @headers Authorization: Bearer <access_token>
+   * @openapi
+   * /api/auth/me:
+   *   get:
+   *     summary: Get current user info
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: User information retrieved
    */
   router.get('/me', authMiddleware, authController.me);
 
   /**
-   * @route   GET /api/auth/validate
-   * @desc    Validate current access token
-   * @access  Private
-   * @headers Authorization: Bearer <access_token>
+   * @openapi
+   * /api/auth/validate:
+   *   get:
+   *     summary: Validate access token
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Token is valid
    */
   router.get('/validate', authMiddleware, authController.validateToken);
 
   /**
-   * @route   POST /api/auth/forgot-password
-   * @desc    Request password reset email
-   * @access  Public
-   * @body    { email }
+   * @openapi
+   * /api/auth/forgot-password:
+   *   post:
+   *     summary: Request password reset
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [email]
+   *             properties:
+   *               email:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Password reset email sent
    */
   router.post('/forgot-password', validatePasswordReset, authController.requestPasswordReset);
 
   /**
-   * @route   POST /api/auth/reset-password
-   * @desc    Reset password using reset token
-   * @access  Public
-   * @body    { token, newPassword }
+   * @openapi
+   * /api/auth/reset-password:
+   *   post:
+   *     summary: Reset password
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [token, newPassword]
+   *             properties:
+   *               token:
+   *                 type: string
+   *               newPassword:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Password reset successful
    */
   router.post('/reset-password', authController.resetPassword);
 

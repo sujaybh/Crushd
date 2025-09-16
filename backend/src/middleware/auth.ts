@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWTPayload } from '../services/authService';
+import { JWTPayload } from '../services/authService.js';
 
 // Extend Request interface to include user
 declare global {
